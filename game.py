@@ -17,7 +17,7 @@ class Move():
 	def parse(self, string, board):
 		m = self.gex.match(string)
 		if not m:
-			return None
+			raise Exception("InvalidMoveFormat")
 
 		self.player = "white" if m.group(1) == "w" else "black"
 		self.x, self.y = (int("0x"+m.group(4),0), int("0x"+m.group(5),0))
@@ -148,10 +148,12 @@ class Board():
 						self.tiles[px][py] = None
 						continue
 				
+	def show(self):
+		print(self.getPtBoard())
 
 	def show(self):
-		print("  " + " ".join([hex(i).replace("0x","") for i in range(self.size)]))
-		print(("-".join([" "] + ["-" for i in range(self.size)])+"\n").join([hex(int(i)).replace("0x","") + "|" + "|".join([(lambda p: " " if not p else p.color[0])(j) for j in self.tiles[i]] + ["\n"]) for i in range(self.size)]))
+		return "  " + " ".join([hex(i).replace("0x","") for i in range(self.size)]) + "\n" +
+		("-".join([" "] + ["-" for i in range(self.size)])+"\n").join([hex(int(i)).replace("0x","") + "|" + "|".join([(lambda p: " " if not p else p.color[0])(j) for j in self.tiles[i]] + ["\n"]) for i in range(self.size)])
 
 if __name__ == "__main__":
 	b = Board()
